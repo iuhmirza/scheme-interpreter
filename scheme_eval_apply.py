@@ -34,9 +34,16 @@ def scheme_eval(expr, env, _=None):  # Optional third argument is ignored
         return scheme_forms.SPECIAL_FORMS[first](rest, env)
     else:
         # BEGIN PROBLEM 3
-        "*** YOUR CODE HERE ***"
+        procedure = scheme_eval(first, env)
+        arguments = rest.map(lambda x: scheme_eval(x, env))
+        return scheme_apply(procedure, arguments, env)
         # END PROBLEM 3
 
+def pairToList(pair):
+    if pair is nil:
+        return []
+    else:
+        return [pair.first] + pairToList(pair.rest)
 
 def scheme_apply(procedure, args, env):
     """Apply Scheme PROCEDURE to argument values ARGS (a Scheme list) in
@@ -45,12 +52,13 @@ def scheme_apply(procedure, args, env):
     if not isinstance(env, Frame):
        assert False, "Not a Frame: {}".format(env)
     if isinstance(procedure, BuiltinProcedure):
-        # BEGIN PROBLEM 2
-        "*** YOUR CODE HERE ***"
+        listArgs = pairToList(args)
+        if procedure.need_env:
+            listArgs.append(env)
         # END PROBLEM 2
         try:
             # BEGIN PROBLEM 2
-            "*** YOUR CODE HERE ***"
+            return procedure.py_func(*listArgs)
             # END PROBLEM 2
         except TypeError as err:
             raise SchemeError('incorrect number of arguments: {0}'.format(procedure))
