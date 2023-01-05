@@ -2,6 +2,11 @@ import builtins
 
 from pair import *
 
+def pairToList(pair):
+    if pair is nil:
+        return []
+    else:
+        return [pair.first] + pairToList(pair.rest)
 
 class SchemeError(Exception):
     """Exception indicating an error in a Scheme program."""
@@ -60,7 +65,10 @@ class Frame:
         if len(formals) != len(vals):
             raise SchemeError('Incorrect number of arguments to function call')
         # BEGIN PROBLEM 8
-        "*** YOUR CODE HERE ***"
+        child_frame = Frame(self)
+        key_val_pairs = zip(pairToList(formals), pairToList(vals))
+        child_frame.bindings = {key: val for (key, val) in key_val_pairs}
+        return child_frame
         # END PROBLEM 8
 
 ##############
